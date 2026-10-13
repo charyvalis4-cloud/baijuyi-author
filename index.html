@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大唐詩魔：白居易的雙面人生</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#000;overflow:hidden}
+.stage{width:100vw;height:100vh;position:relative;display:flex;align-items:center;justify-content:center}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity 0.8s ease}
+.slide.active{opacity:1;pointer-events:all}
+.dots-bg{position:absolute;inset:0;background-image:radial-gradient(circle,#1a1a1a 1px,transparent 1px);background-size:18px 18px;opacity:0.07;pointer-events:none;z-index:0}
+.dots-bg.light{background-image:radial-gradient(circle,#f5f0e8 1px,transparent 1px)}
+.narration{position:absolute;bottom:0;left:0;right:0;background:rgba(20,20,20,0.92);color:#f5f0e8;font-family:'Noto Serif TC',serif;font-size:clamp(14px,2.2vw,26px);line-height:1.7;padding:clamp(10px,2vh,22px) clamp(20px,5vw,80px);z-index:10;border-top:2px solid #8B1A1A;transform:translateY(100%);transition:transform 0.6s ease 0.5s}
+.slide.active .narration{transform:translateY(0)}
+.source-box{background:#f5f0e8;border-left:4px solid #8B1A1A;padding:clamp(6px,1.2vh,12px) clamp(10px,2vw,18px);font-family:'Noto Sans TC',sans-serif;font-size:clamp(10px,1.3vw,16px);color:#4a2a1a;line-height:1.6;position:absolute;z-index:5}
+.source-box strong{color:#8B1A1A;display:block;margin-bottom:2px;font-size:0.9em}
+.speech{background:#fff;border:2px solid #1a1a1a;border-radius:10px;padding:clamp(6px,1vh,12px) clamp(10px,2vw,20px);font-family:'Noto Serif TC',serif;font-size:clamp(12px,1.8vw,22px);color:#1a1a1a;line-height:1.5;position:relative;display:inline-block}
+.speech::after{content:'';position:absolute;bottom:-12px;left:20px;width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:12px solid #1a1a1a}
+.speech.dark-style{background:#1a1a1a;color:#f5f0e8;border-color:#888}
+.speech.dark-style::after{border-top-color:#888}
+.speech.right-tail::after{left:auto;right:20px}
+#progress{position:fixed;bottom:0;left:0;height:4px;background:#8B1A1A;z-index:100;transition:width 0.3s ease}
+#controls{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:12px;align-items:center;z-index:200;background:rgba(0,0,0,0.75);padding:8px 20px;border-radius:50px;border:1px solid #333;opacity:0;transition:opacity 0.3s}
+body:hover #controls{opacity:1}
+#controls button{background:none;border:1px solid #666;color:#ccc;padding:6px 16px;border-radius:20px;cursor:pointer;font-family:'Noto Sans TC',sans-serif;font-size:13px;transition:all 0.2s}
+#controls button:hover{background:#333;color:#fff;border-color:#999}
+#slide-counter{color:#888;font-size:12px;font-family:sans-serif;min-width:50px;text-align:center}
+#audio-status{color:#8B1A1A;font-size:11px;font-family:sans-serif;min-width:80px;text-align:center}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideLeft{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideRight{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+@keyframes drawLine{from{stroke-dashoffset:300}to{stroke-dashoffset:0}}
+@keyframes flicker{0%,100%{opacity:1}50%{opacity:0.6}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.anim-fadeup{animation:fadeUp 0.8s ease forwards}
+.anim-fadein{animation:fadeIn 1s ease forwards}
+.anim-slideleft{animation:slideLeft 0.7s ease forwards}
+.anim-slideright{animation:slideRight 0.7s ease forwards}
+.anim-scalein{animation:scaleIn 0.6s ease forwards}
+.delay-1{animation-delay:0.3s;opacity:0}
+.delay-2{animation-delay:0.6s;opacity:0}
+.delay-3{animation-delay:0.9s;opacity:0}
+.delay-4{animation-delay:1.2s;opacity:0}
+.delay-5{animation-delay:1.5s;opacity:0}
+
+/* 片頭 */
+#s0{background:#1a1a1a}
+#s0 .content{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:clamp(10px,3vh,30px);z-index:1;position:relative}
+#s0 h1{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(36px,8vw,110px);color:#f5f0e8;letter-spacing:0.15em;text-shadow:0 0 60px rgba(139,26,26,0.4)}
+#s0 h2{font-family:'Noto Serif TC',serif;font-weight:400;font-size:clamp(16px,3vw,42px);color:#888;letter-spacing:0.2em}
+#s0 .tagline{font-family:'Noto Serif TC',serif;font-size:clamp(12px,1.8vw,24px);color:#8B1A1A;letter-spacing:0.1em;margin-top:1vh}
+#s0 .deco-line{width:clamp(60px,10vw,120px);height:1px;background:#333}
+
+/* S1 */
+#s1{background:#fff}
+#s1 .left-panel{position:absolute;left:0;top:0;width:50%;height:100%;background:#f5f0e8;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:clamp(20px,4vw,60px);z-index:1}
+#s1 .right-panel{position:absolute;right:0;top:0;width:50%;height:100%;background:#1a1a1a;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:clamp(20px,4vw,60px);z-index:1}
+#s1 .divider{position:absolute;left:50%;top:0;bottom:0;width:3px;background:#1a1a1a;z-index:2}
+#s1 .title-tag{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(24px,4vw,56px);color:#1a1a1a;margin-bottom:clamp(8px,2vh,20px);writing-mode:vertical-rl;letter-spacing:0.1em}
+#s1 .brush-art{font-size:clamp(60px,10vw,140px);filter:grayscale(100%) contrast(200%);line-height:1}
+#s1 .danmu-wrap{display:flex;flex-direction:column;gap:clamp(6px,1.5vh,16px)}
+#s1 .danmu-item{font-family:'Noto Sans TC',sans-serif;color:#f5f0e8;letter-spacing:0.05em}
+#s1 .danmu-item.lg{font-size:clamp(14px,2.5vw,32px);font-weight:700}
+#s1 .danmu-item.sm{font-size:clamp(11px,1.5vw,20px);color:#888;margin-left:clamp(8px,2vw,20px)}
+#s1 .danmu-item.red{font-size:clamp(13px,2vw,26px);color:#8B1A1A;font-weight:700}
+
+/* S2 */
+#s2{background:#fff}
+#s2 .scene{width:100%;height:100%;position:relative;z-index:1;display:flex;align-items:flex-end;justify-content:center;padding-bottom:clamp(80px,12vh,160px)}
+#s2 .cry-figure{position:absolute;left:8%;bottom:clamp(80px,14vh,170px);font-size:clamp(50px,8vw,110px);filter:grayscale(100%) contrast(180%)}
+#s2 .horse-figure{position:absolute;right:8%;bottom:clamp(80px,14vh,160px);font-size:clamp(50px,8vw,110px);filter:grayscale(100%) contrast(180%)}
+#s2 .dash-line-svg{position:absolute;bottom:clamp(120px,18vh,200px);left:18%;right:18%;height:2px}
+#s2 .speech-wrap{position:absolute;left:6%;bottom:clamp(180px,27vh,300px)}
+#s2 .source-box{bottom:clamp(70px,11vh,140px);right:4%;width:clamp(200px,35vw,420px)}
+
+/* S3 */
+#s3{background:#1a1a1a}
+#s3 .letter-wrap{position:absolute;left:10%;top:50%;transform:translateY(-50%);width:clamp(180px,32vw,400px);z-index:2}
+#s3 .letter{background:#f5f0e8;padding:clamp(16px,3vw,40px);transform:rotate(-3deg);box-shadow:8px 8px 0 #000;position:relative}
+#s3 .letter .verse{font-family:'Noto Serif TC',serif;font-size:clamp(14px,2.2vw,28px);color:#1a1a1a;line-height:2;border-bottom:1px solid #ccc;padding-bottom:clamp(6px,1vh,12px);margin-bottom:clamp(6px,1vh,12px)}
+#s3 .letter .from{font-family:'Noto Sans TC',sans-serif;font-size:clamp(10px,1.2vw,16px);color:#888}
+#s3 .tear{width:clamp(6px,1vw,12px);height:clamp(9px,1.5vw,18px);background:#8B1A1A;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;position:absolute;bottom:clamp(12px,2vh,24px);right:clamp(16px,3vw,36px)}
+#s3 .eyes-wrap{position:absolute;right:10%;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2vh,24px);z-index:2}
+#s3 .eye{width:clamp(40px,6vw,80px);height:clamp(26px,4vw,52px);background:#f5f0e8;border:3px solid #f5f0e8;border-radius:50%;display:flex;align-items:center;justify-content:center}
+#s3 .pupil{width:clamp(14px,2.2vw,28px);height:clamp(14px,2.2vw,28px);background:#1a1a1a;border-radius:50%}
+#s3 .shock-txt{font-family:'Noto Serif TC',serif;font-size:clamp(10px,1.5vw,20px);color:#8B1A1A;letter-spacing:0.1em}
+#s3 .source-box{bottom:clamp(70px,11vh,140px);left:10%;right:10%;background:#2a1818;border-left-color:#8B1A1A;color:#d4a090}
+#s3 .source-box strong{color:#8B1A1A}
+
+/* S4 */
+#s4{background:#fff}
+#s4 .scene{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+#s4 .lone-figure{display:flex;flex-direction:column;align-items:center;gap:clamp(10px,2vh,24px)}
+#s4 .figure-emoji{font-size:clamp(60px,10vw,130px);filter:grayscale(100%) contrast(200%);animation:float 3s ease-in-out infinite}
+#s4 .location{font-family:'Noto Serif TC',serif;font-size:clamp(14px,2.2vw,28px);color:#888;letter-spacing:0.3em}
+#s4 .food{position:absolute;bottom:clamp(120px,18vh,200px);left:clamp(40px,8vw,120px);font-size:clamp(28px,4vw,56px);filter:grayscale(100%);opacity:0.4;transform:rotate(-15deg)}
+#s4::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.6) 100%);pointer-events:none;z-index:0}
+#s4 .source-box{bottom:clamp(70px,11vh,140px);right:4%;width:clamp(200px,38vw,460px)}
+
+/* S5 */
+#s5{background:#f5f0e8}
+#s5 .scene{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;flex-direction:column;gap:clamp(16px,3vh,40px)}
+#s5 .figures-row{display:flex;align-items:flex-end;gap:clamp(16px,3vw,40px)}
+#s5 .main-fig{font-size:clamp(60px,9vw,120px);filter:grayscale(100%) contrast(150%)}
+#s5 .side-fig{font-size:clamp(30px,4.5vw,60px);filter:grayscale(100%) contrast(150%);opacity:.8}
+#s5 .source-box{bottom:clamp(70px,11vh,140px);left:4%;width:clamp(200px,40vw,500px)}
+
+/* S6 */
+#s6{background:#1a1a1a}
+#s6 .scene{width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:clamp(30px,6vw,100px);position:relative;z-index:1}
+#s6 .real-self{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.5vh,20px)}
+#s6 .self-fig{font-size:clamp(60px,9vw,120px);filter:grayscale(100%)}
+#s6 .self-label{font-family:'Noto Sans TC',sans-serif;font-size:clamp(12px,1.5vw,20px);color:#888}
+#s6 .arrow{font-size:clamp(24px,4vw,56px);color:#444}
+#s6 .mirror{width:clamp(100px,15vw,200px);height:clamp(130px,20vw,260px);border-radius:50%;border:clamp(4px,0.6vw,8px) solid #666;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#0a0a0a}
+#s6 .monster-fig{font-size:clamp(50px,8vw,110px);filter:grayscale(100%) contrast(300%) brightness(0.3);animation:flicker 2s ease-in-out infinite}
+#s6 .speech-wrap{position:absolute;bottom:clamp(120px,18vh,220px);left:50%;transform:translateX(-50%);white-space:nowrap}
+
+/* 片尾 */
+#s7{background:#1a1a1a}
+#s7 .content{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(16px,3vh,40px);padding:clamp(20px,5vw,80px);text-align:center;z-index:1;position:relative}
+#s7 .big-q{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(24px,4.5vw,64px);color:#f5f0e8;letter-spacing:0.1em}
+#s7 .questions{display:flex;flex-direction:column;gap:clamp(10px,2vh,24px);max-width:800px}
+#s7 .q-item{font-family:'Noto Serif TC',serif;font-weight:400;font-size:clamp(14px,2vw,28px);color:#aaa;line-height:1.7;border-left:3px solid #333;padding-left:clamp(10px,2vw,24px);text-align:left}
+#s7 .disclaimer{font-family:'Noto Sans TC',sans-serif;font-size:clamp(10px,1.2vw,16px);color:#555;margin-top:clamp(10px,2vh,24px);border-top:1px solid #2a2a2a;padding-top:clamp(8px,1.5vh,20px)}
+
+/* ===== iPad／行動裝置修正：效能與操作 ===== */
+html,body{height:100%;height:100dvh;-webkit-text-size-adjust:100%;touch-action:manipulation}
+.stage{height:100vh;height:100dvh}
+.slide{visibility:hidden;transition:opacity .45s ease,visibility 0s linear .45s;contain:layout paint;-webkit-backface-visibility:hidden}
+.slide.active{visibility:visible;transition:opacity .45s ease,visibility 0s;will-change:opacity}
+.slide:not(.active) *{animation:none!important;transition:none!important}
+.narration{transition:transform .4s ease .3s}
+#s4 .figure-emoji,#s6 .monster-fig{will-change:transform,opacity}
+#controls{top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;bottom:auto;left:auto;transform:none;opacity:.92;gap:8px;padding:6px 12px;flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 20px);-webkit-tap-highlight-color:transparent}
+body:hover #controls{opacity:1}
+#controls button{padding:10px 16px;font-size:15px;min-height:44px;background:rgba(0,0,0,.4)}
+#slide-counter{font-size:14px;color:#ccc}
+#audio-status{font-size:12px;color:#e0a0a0;min-width:0;max-width:46vw;text-align:left}
+#start{position:fixed;inset:0;z-index:500;background:#1a1a1a;color:#f5f0e8;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center;padding:24px;cursor:pointer;font-family:'Noto Serif TC',serif}
+#start h1{font-size:clamp(30px,7vw,72px);font-weight:900;letter-spacing:.15em}
+#start p{font-size:clamp(14px,2.2vw,22px);color:#aaa;line-height:1.8}
+#start .go{margin-top:8px;padding:14px 36px;border:2px solid #8B1A1A;border-radius:40px;font-size:clamp(18px,3vw,28px);background:#8B1A1A;color:#fff}
+</style>
+</head>
+<body>
+<div class="stage">
+
+<!-- 片頭 -->
+<div class="slide active" id="s0">
+  <div class="dots-bg light"></div>
+  <div class="content">
+    <div class="deco-line anim-fadein"></div>
+    <h1 class="anim-fadeup delay-1">大唐詩魔</h1>
+    <h2 class="anim-fadeup delay-2">白居易的雙面人生</h2>
+    <div class="deco-line anim-fadein delay-3"></div>
+    <div class="tagline anim-fadeup delay-4">他寫盡天下深情——但那些女子呢？</div>
+  </div>
+</div>
+
+<!-- 第1格 -->
+<div class="slide" id="s1">
+  <div class="dots-bg"></div>
+  <div class="left-panel">
+    <div class="title-tag anim-slideleft">長恨歌</div>
+    <div class="brush-art anim-fadein delay-2">✍️</div>
+    <div class="anim-fadeup delay-3" style="font-family:'Noto Serif TC',serif;font-size:clamp(11px,1.4vw,18px);color:#888;margin-top:1vh;letter-spacing:0.1em">元和元年・白居易 著</div>
+  </div>
+  <div class="divider"></div>
+  <div class="right-panel">
+    <div class="danmu-wrap">
+      <div class="danmu-item lg anim-slideright delay-1">古代版學霸渣男 👀</div>
+      <div class="danmu-item sm anim-slideright delay-2">詩寫得好 ≠ 人品好</div>
+      <div class="danmu-item red anim-slideright delay-3">千古第一渣？</div>
+      <div class="danmu-item sm anim-slideright delay-4" style="margin-left:0;color:#666">——現代網友彈幕</div>
+    </div>
+  </div>
+  <div class="source-box anim-fadeup delay-3" style="bottom:clamp(70px,11vh,140px);left:4%;width:clamp(180px,32vw,380px)">
+    <strong>史料</strong>《長恨歌》作於元和元年（806年），全詩840字，為白居易最廣為人知的代表作。
+  </div>
+  <div class="narration">世人皆知他寫盡天下深情，卻不知那柔情筆尖下，埋藏著多少女子的斑斑血淚。</div>
+</div>
+
+<!-- 第2格 -->
+<div class="slide" id="s2">
+  <div class="dots-bg"></div>
+  <div class="scene">
+    <div class="cry-figure anim-fadein delay-1">🙇‍♀️</div>
+    <svg class="dash-line-svg" viewBox="0 0 100 2" preserveAspectRatio="none">
+      <line x1="0" y1="1" x2="100" y2="1" stroke="#888" stroke-width="1.5" stroke-dasharray="6,4"
+        style="stroke-dashoffset:300;animation:drawLine 1.5s ease 0.8s forwards"/>
+    </svg>
+    <div class="horse-figure anim-fadein delay-2">🏇</div>
+    <div class="speech-wrap anim-fadeup delay-3">
+      <div class="speech">樂天哥哥……別丟下我……</div>
+    </div>
+  </div>
+  <div class="source-box anim-fadeup delay-4" style="bottom:clamp(70px,11vh,140px);right:4%;width:clamp(200px,36vw,440px)">
+    <strong>史料</strong>湘靈為白居易青梅竹馬，因白家門第較高，其母反對婚事，二人終未成婚。白居易曾為她寫下〈潛別離〉等詩。
+  </div>
+  <div class="narration">十一歲的初戀湘靈，因門第之別，成了他仕途上的第一個棄子。</div>
+</div>
+
+<!-- 第3格 -->
+<div class="slide" id="s3">
+  <div class="dots-bg light" style="opacity:0.05"></div>
+  <div class="letter-wrap anim-scalein delay-1">
+    <div class="letter">
+      <div class="verse">就中獨合長眠作，<br>誰遣同棲死後灰？</div>
+      <div class="from">白居易 致 關盼盼</div>
+      <div class="tear anim-fadein delay-4"></div>
+    </div>
+  </div>
+  <div class="eyes-wrap anim-fadeup delay-2">
+    <div class="eye"><div class="pupil"></div></div>
+    <div class="eye"><div class="pupil"></div></div>
+    <div class="shock-txt anim-fadein delay-3">啪嗒</div>
+  </div>
+  <div class="source-box anim-fadeup delay-4" style="bottom:clamp(70px,11vh,140px);left:10%;right:10%">
+    <strong>史料與爭議</strong>關盼盼為唐代歌伎，夫張愔死後守節十年。白居易寫詩質疑其行為，後世評價兩極。史載她後來去世，直接因果關係史學界仍有爭論。
+  </div>
+  <div class="narration">妳既為他守節，為何不乾脆隨他而去？</div>
+</div>
+
+<!-- 第4格 -->
+<div class="slide" id="s4">
+  <div class="dots-bg"></div>
+  <div class="scene">
+    <div class="lone-figure">
+      <div class="figure-emoji anim-fadein delay-1">🏮</div>
+      <div class="location anim-fadeup delay-2">燕 子 樓</div>
+      <div class="anim-fadein delay-3" style="font-family:'Noto Serif TC',serif;font-size:clamp(12px,1.8vw,24px);color:#ccc;letter-spacing:0.2em">空蕩・孤寂</div>
+    </div>
+    <div class="food anim-fadein delay-2">🍱</div>
+  </div>
+  <div class="source-box anim-fadeup delay-4" style="bottom:clamp(70px,11vh,140px);right:4%;width:clamp(200px,38vw,460px)">
+    <strong>史料</strong>關盼盼絕食事件記載於唐人筆記《本事詩》，距白居易寫詩已逾十年，因果關係史界存疑。
+  </div>
+  <div class="narration">絕食十日，貞烈之魂終被他的文字生生<span style="color:#8B1A1A">逼死</span>。</div>
+</div>
+
+<!-- 第5格 -->
+<div class="slide" id="s5">
+  <div class="dots-bg" style="opacity:0.12"></div>
+  <div class="scene">
+    <div class="figures-row">
+      <div class="side-fig anim-fadein delay-2">💃</div>
+      <div class="main-fig anim-fadein delay-1">🧔</div>
+      <div class="side-fig anim-fadein delay-2">🎶</div>
+      <div class="side-fig anim-fadein delay-3" style="font-size:clamp(22px,3.5vw,46px)">🍷</div>
+    </div>
+    <div class="anim-fadeup delay-3">
+      <div class="speech dark-style right-tail">樊素，這櫻桃小口果然生得極好……</div>
+    </div>
+  </div>
+  <div class="source-box anim-fadeup delay-4" style="bottom:clamp(70px,11vh,140px);left:4%;width:clamp(200px,40vw,500px)">
+    <strong>史料</strong>白居易晚年確有家伎樊素（善歌）、小蠻（善舞），晚年體衰後曾將部分家伎放還，其詩中有所記錄，後世解讀不一。
+  </div>
+  <div class="narration">年年更替的姬妾，不過是他指間流轉的玩物，膩了，便<span style="color:#8B1A1A">轉手賣去</span>。</div>
+</div>
+
+<!-- 第6格 -->
+<div class="slide" id="s6">
+  <div class="dots-bg light" style="opacity:0.04"></div>
+  <div class="scene">
+    <div class="real-self">
+      <div class="self-fig anim-slideleft delay-1">🧔</div>
+      <div class="self-label anim-fadein delay-2">白居易</div>
+    </div>
+    <div class="arrow anim-fadein delay-2">→</div>
+    <div class="mirror anim-scalein delay-2">
+      <div class="monster-fig">👤</div>
+    </div>
+  </div>
+  <div class="speech-wrap anim-fadeup delay-3">
+    <div class="speech dark-style" style="font-style:italic;white-space:normal;max-width:clamp(240px,50vw,600px);text-align:center">
+      我這一生，寫盡了悲憫，也活夠了風流。
+    </div>
+  </div>
+  <div class="narration">是感性大師，還是自私渣男？歷史的墨跡，從不只<span style="color:#8B1A1A">一種顏色</span>。</div>
+</div>
+
+<!-- 片尾 -->
+<div class="slide" id="s7">
+  <div class="dots-bg light" style="opacity:0.04"></div>
+  <div class="content">
+    <div class="big-q anim-fadeup delay-1">你怎麼看白居易？</div>
+    <div class="questions">
+      <div class="q-item anim-fadeup delay-2">他是偉大的詩人，還是自私的男人？</div>
+      <div class="q-item anim-fadeup delay-3">一個人的才華，能抵消他對他人的傷害嗎？</div>
+      <div class="q-item anim-fadeup delay-4">我們該如何評價歷史上的複雜人物？</div>
+    </div>
+    <div class="disclaimer anim-fadein delay-5">以上部分內容為詮釋性觀點，史學界仍有不同看法。</div>
+  </div>
+</div>
+
+</div><!-- /stage -->
+
+<div id="start" role="button" aria-label="開始播放"><h1>大唐詩魔</h1><p>白居易的雙面人生<br>（iPad／iPhone 需要先點一下，才能播放旁白）<br>請確認側邊靜音開關沒有開啟、音量已調高</p><div class="go">👆 點一下開始</div></div>
+
+<div style="position:fixed;left:10px;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:450;font:13px sans-serif"><a href="life.html" style="color:#ddd;background:rgba(0,0,0,.45);padding:8px 12px;border-radius:20px;margin-right:6px;text-decoration:none">生平＋爭議</a><a href="comic.html" style="color:#ddd;background:rgba(0,0,0,.45);padding:8px 12px;border-radius:20px;margin-right:6px;text-decoration:none">四格漫畫</a><a href="baijuyi-handout.docx" style="color:#ddd;background:rgba(0,0,0,.45);padding:8px 12px;border-radius:20px;text-decoration:none">Word 講義</a></div>
+<div id="progress" style="width:0%"></div>
+
+<div id="controls">
+  <button onclick="prevSlide()">◀ 上一頁</button>
+  <span id="slide-counter">1 / 8</span>
+  <button onclick="nextSlide()">下一頁 ▶</button>
+  <button onclick="toggleAuto()" id="auto-btn">▶ 自動播放</button>
+  <span id="audio-status">🔇 點「開始」後朗讀</span>
+</div>
+
+<script>/* 只用臺灣華語（zh-TW）語音，絕不退回大陸（zh-CN）或粵語（zh-HK）語音 */
+function twVoice(){var L=[];try{L=speechSynthesis.getVoices()}catch(e){}
+var tw=L.filter(function(v){var l=(v.lang||'').replace('_','-').toLowerCase();return l==='zh-tw'||l==='cmn-tw'||l.indexOf('zh-hant-tw')===0||(/^(zh|cmn)/.test(l)&&/taiwan|臺灣|台灣/i.test(v.name))});
+tw.sort(function(a,b){return (/natural|online|premium|enhanced/i.test(b.name)?1:0)-(/natural|online|premium|enhanced/i.test(a.name)?1:0)});return tw[0]||null}
+function twApply(u){u.lang='zh-TW';var v=twVoice();if(v)u.voice=v;return u}
+try{speechSynthesis.getVoices();speechSynthesis.addEventListener('voiceschanged',function(){})}catch(e){}
+</script>
+<script>
+// 旁白：直接用裝置的臺灣中文語音（repo 內沒有 mp3，不再白等 404）。
+// iPad／iPhone Safari 只允許「點擊當下」啟動語音，所以先顯示「點一下開始」並在點擊時解鎖。
+const MIN_DURATION = {0:5000,1:7000,2:7000,3:6000,4:6000,5:7000,6:7000,7:10000};
+const slides = [...document.querySelectorAll('.slide')];
+const total = slides.length;
+const statusEl = document.getElementById('audio-status');
+let current = 0, isAutoPlaying = false, autoTimer = null, tok = 0, started = false, unlocked = false;
+const hasTTS = 'speechSynthesis' in window;
+
+function voice(){
+  try{ if (typeof twVoice === 'function') return twVoice(); }catch(e){}
+  return null;
+}
+function unlock(){
+  if (unlocked || !hasTTS) return;
+  try{ const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); unlocked = true; }catch(e){}
+}
+function stopAudio(){
+  tok++;
+  if (autoTimer){ clearTimeout(autoTimer); autoTimer = null; }
+  try{ if (hasTTS) speechSynthesis.cancel(); }catch(e){}
+}
+function afterDone(my, fallbackMs){
+  if (my !== tok) return;
+  statusEl.textContent = '✓ 播放完畢';
+  if (isAutoPlaying) scheduleNext(fallbackMs);
+}
+function speak(i){
+  stopAudio();
+  const my = tok;
+  const nEl = slides[i].querySelector('.narration');
+  if (!nEl){ statusEl.textContent = '🔇 無旁白'; if (isAutoPlaying) scheduleNext(MIN_DURATION[i]); return; }
+  if (!hasTTS){ statusEl.textContent = '⚠️ 此瀏覽器不支援語音朗讀'; return; }
+  const text = nEl.textContent.replace(/\s+/g,' ').trim();
+  const parts = text.match(/[^。！？；]+[。！？；]?/g) || [text];   // 分句朗讀，避免 iOS 長句中途停掉
+  const v = voice();
+  statusEl.textContent = v ? '🔊 朗讀中' : '🔊 朗讀中（找不到臺灣中文語音，用裝置預設）';
+  let k = 0;
+  const next = () => {
+    if (my !== tok) return;
+    if (k >= parts.length){ afterDone(my, 800); return; }
+    const u = new SpeechSynthesisUtterance(parts[k++]);
+    u.lang = 'zh-TW'; if (v) u.voice = v; u.rate = 0.95;
+    u.onend = next;
+    u.onerror = e => { if (my === tok && e.error !== 'canceled' && e.error !== 'interrupted') statusEl.textContent = '⚠️ 語音被中斷，請按「🔊 朗讀」再試一次'; };
+    speechSynthesis.speak(u);
+  };
+  setTimeout(() => { if (my === tok) next(); }, 80);
+}
+function showSlide(n, silent){
+  slides[current].classList.remove('active');
+  current = (n + total) % total;
+  slides[current].classList.add('active');
+  const anims = slides[current].querySelectorAll('[class*="anim-"],[class*="delay-"]');
+  anims.forEach(el => { el.style.animation = 'none'; el.offsetHeight; el.style.animation = ''; });
+  document.getElementById('slide-counter').textContent = (current + 1) + ' / ' + total;
+  document.getElementById('progress').style.width = ((current + 1) / total * 100).toFixed(1) + '%';
+  if (started && !silent) speak(current);
+}
+function nextSlide(){
+  if (autoTimer){ clearTimeout(autoTimer); autoTimer = null; }
+  unlock(); showSlide(current + 1);
+}
+function prevSlide(){
+  if (autoTimer){ clearTimeout(autoTimer); autoTimer = null; }
+  unlock(); showSlide(current - 1);
+}
+function scheduleNext(delay){
+  if (!isAutoPlaying) return;
+  if (current >= total - 1){
+    isAutoPlaying = false;
+    document.getElementById('auto-btn').textContent = '▶ 自動播放';
+    return;
+  }
+  autoTimer = setTimeout(() => { if (isAutoPlaying) showSlide(current + 1); }, delay);
+}
+function toggleAuto(){
+  const btn = document.getElementById('auto-btn');
+  unlock();
+  if (isAutoPlaying){
+    isAutoPlaying = false; stopAudio(); btn.textContent = '▶ 自動播放';
+  } else {
+    isAutoPlaying = true; btn.textContent = '⏸ 暫停';
+    if (current >= total - 1) showSlide(0); else speak(current);
+  }
+}
+function replay(){ unlock(); speak(current); }
+function startShow(){
+  const st = document.getElementById('start');
+  if (st) st.style.display = 'none';
+  started = true; unlock();
+  speak(current);
+}
+// 加一顆「朗讀」鈕（重播本頁旁白）
+(function(){
+  const c = document.getElementById('controls'), b = document.createElement('button');
+  b.textContent = '🔊 朗讀'; b.onclick = replay; c.insertBefore(b, document.getElementById('auto-btn'));
+})();
+document.getElementById('start').addEventListener('click', startShow);
+document.addEventListener('keydown', e => {
+  if (!started) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); startShow(); } return; }
+  if (e.key === 'ArrowRight' || e.key === ' '){ e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft'){ e.preventDefault(); prevSlide(); }
+});
+// 觸控：左右滑動換頁
+let tx = null, ty = null;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, {passive:true});
+document.addEventListener('touchend', e => {
+  if (tx === null || !started) return;
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty; tx = null;
+  if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5){ dx < 0 ? nextSlide() : prevSlide(); }
+}, {passive:true});
+window.addEventListener('pagehide', () => { try{ speechSynthesis.cancel(); }catch(e){} });
+document.addEventListener('visibilitychange', () => { if (document.hidden) { try{ speechSynthesis.cancel(); }catch(e){} } });
+showSlide(0, true);
+</script>
+</body>
+</html>

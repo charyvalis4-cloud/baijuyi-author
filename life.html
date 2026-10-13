@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-TW"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>詩王白居易：學霸背後的另一面</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'Noto Sans TC',sans-serif}
+.stage{width:100vw;height:100vh;position:relative}
+.slide{position:absolute;inset:0;display:flex;align-items:center;gap:4vw;padding:6vh 6vw 20vh;opacity:0;pointer-events:none;transition:opacity .8s}
+.slide.active{opacity:1;pointer-events:all}
+.light{background:#f5f0e8;color:#1a1a1a}.dark{background:#1a1a1a;color:#f5f0e8}
+.slide::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle,currentColor 1px,transparent 1px);background-size:18px 18px;opacity:.07;pointer-events:none}
+.txt{flex:1;z-index:1;display:flex;flex-direction:column;gap:2vh}
+.tag{font-family:'Noto Serif TC',serif;font-size:clamp(13px,1.6vw,22px);color:#8B1A1A;letter-spacing:.2em}
+.dark .tag{color:#d4756b}
+h1{font-family:'Noto Serif TC',serif;font-weight:900;font-size:clamp(30px,5.5vw,84px);line-height:1.2}
+h2{font-family:'Noto Serif TC',serif;font-weight:700;font-size:clamp(18px,3vw,42px);color:#8B1A1A}
+.dark h2{color:#d4756b}
+.line{font-family:'Noto Serif TC',serif;font-size:clamp(14px,2vw,28px);color:#888}
+ul{list-style:none;display:flex;flex-direction:column;gap:1.6vh}
+li{font-family:'Noto Serif TC',serif;font-size:clamp(14px,1.9vw,27px);line-height:1.6;border-left:4px solid #8B1A1A;padding-left:1.4vw;animation:up .6s both}
+li:nth-child(2){animation-delay:.3s}li:nth-child(3){animation-delay:.6s}li:nth-child(4){animation-delay:.9s}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.pic{flex:0 0 42%;z-index:1}
+.pic img{width:100%;border:3px solid #8B1A1A;border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.src{position:absolute;left:6vw;right:6vw;bottom:15vh;z-index:2;background:#f5f0e8;color:#333;border-left:4px solid #8B1A1A;padding:.8vh 1.2vw;font-size:clamp(10px,1.2vw,16px);line-height:1.6}
+.narration{position:absolute;left:0;right:0;bottom:0;background:rgba(20,20,20,.94);color:#f5f0e8;font-family:'Noto Serif TC',serif;font-size:clamp(13px,1.9vw,24px);line-height:1.7;padding:1.6vh 6vw;border-top:2px solid #8B1A1A;z-index:3;min-height:13vh}
+.bar{position:fixed;top:0;left:0;height:4px;background:#8B1A1A;z-index:9;transition:width .4s}
+.ctl{position:fixed;top:1.5vh;right:1.5vw;z-index:9;display:flex;gap:8px;align-items:center;font-size:13px}
+.ctl button{font:inherit;padding:5px 12px;border:1px solid #8B1A1A;background:rgba(245,240,232,.92);border-radius:6px;cursor:pointer}
+.ctl span{background:rgba(0,0,0,.6);color:#fff;padding:4px 8px;border-radius:6px}
+</style></head><body>
+<div class="bar" id="bar"></div>
+<div class="ctl"><span id="st">🔇</span><span id="ct"></span><button id="pv">◀</button><button id="au">▶ 自動播放</button><button id="nx">▶▶</button></div>
+<div class="stage" id="stage"></div>
+<script>/* 只用臺灣華語（zh-TW）語音，絕不退回大陸（zh-CN）或粵語（zh-HK）語音 */
+function twVoice(){var L=[];try{L=speechSynthesis.getVoices()}catch(e){}
+var tw=L.filter(function(v){var l=(v.lang||'').replace('_','-').toLowerCase();return l==='zh-tw'||l==='cmn-tw'||l.indexOf('zh-hant-tw')===0||(/^(zh|cmn)/.test(l)&&/taiwan|臺灣|台灣/i.test(v.name))});
+tw.sort(function(a,b){return (/natural|online|premium|enhanced/i.test(b.name)?1:0)-(/natural|online|premium|enhanced/i.test(a.name)?1:0)});return tw[0]||null}
+function twApply(u){u.lang='zh-TW';var v=twVoice();if(v)u.voice=v;return u}
+try{speechSynthesis.getVoices();speechSynthesis.addEventListener('voiceschanged',function(){})}catch(e){}
+</script>
+<script>
+const S=[{"t": "dark", "tag": "白居易・生平與爭議", "h": "詩王白居易", "h2": "學霸背後的另一面", "line": "他寫盡天下深情——但那些女子呢？", "img": "open", "src": "", "n": "詩王白居易，學霸背後的另一面。他的詩，傳說連老奶奶都聽得懂；他的人生，卻有許多值得我們討論的地方。這一課，我們先認識他的一生，再用史料檢驗那些「渣男」的指控。"}, {"t": "light", "tag": "一、少年學霸", "h": "苦讀出身的孩子", "pts": ["772 年生於河南新鄭，成長在戰亂後的動盪年代", "794 年父親去世，家境清寒", "自述苦讀到「口舌成瘡，手肘成胝」"], "src": "〈與元九書〉；生卒年與出身據漢典及教學資料；794 年喪父據網路整理（待核對）。", "n": "白居易，字樂天，七七二年生於河南新鄭。他成長在安史之亂之後的動盪年代，家境清寒，二十出頭就失去父親。他自己說，讀書讀到口舌生瘡、手肘長繭，是真正靠苦讀成為學霸的人。"}, {"t": "light", "tag": "二、一鳴驚人", "h": "十七人中最年輕", "pts": ["傳說十六歲到長安拜見顧況，顧況先戲稱「長安居大不易」，讀到「野火燒不盡，春風吹又生」後改口稱讚", "800 年考中進士，十七位同榜中最年輕，自題「十七人中最少年」", "803 年與元稹同登拔萃科、同授校書郎，終身摯友，合稱「元白」"], "src": "顧況軼事見筆記，細節與年代各書不一，請當傳說；進士與拔萃見《登科記考》等資料。", "n": "傳說他十六歲到長安拜見顧況，顧況先開玩笑說長安居大不易，讀到野火燒不盡，春風吹又生，立刻改口稱讚。這是軼事，細節各書不同。可以確定的是，他在八百年考中進士，是十七位同榜裡最年輕的，也在八百零三年和元稹成為終身摯友，後人合稱元白。"}, {"t": "light", "tag": "三、諷喻詩人", "h": "為時而著，為事而作", "pts": ["806 年任盩厔尉，寫下《長恨歌》", "後任翰林學士、左拾遺，寫《秦中吟》十首、《新樂府》五十首", "主張「文章合為時而著，歌詩合為事而作」", "詩風淺白，傳說老嫗能解"], "src": "漢典；教學資料；《長恨歌》年代據一般說法。", "n": "八百零六年，他擔任盩厔縣尉，寫下長恨歌。後來擔任翰林學士和左拾遺，寫了秦中吟、新樂府，主張文章要為時代而寫，詩歌要為事件而作。他的詩淺白，傳說連老奶奶都聽得懂。"}, {"t": "dark", "tag": "四、江州之貶", "h": "一場突來的挫折", "pts": ["815 年宰相武元衡遇刺，他上疏請捕刺客，被指「越職言事」", "政敵另指他母親墜井而死，他卻作〈賞花〉〈新井〉詩，「有傷名教」（這是當時的指控）", "貶為江州司馬，隔年作《琵琶行》：「同是天涯淪落人」", "從此由兼善天下轉向獨善其身"], "src": "學校教材及期刊論文（母親墜井一事為政敵指控，細節請查證）。", "n": "八百一十五年，宰相武元衡遇刺，白居易上疏請求捉拿刺客，被指責越職言事。政敵還拿他母親墜井去世，而他寫了賞花、新井詩這件事攻擊他，說他有傷名教。他被貶為江州司馬，隔年寫下琵琶行，同是天涯淪落人。這次挫折，讓他從想改變天下，轉向保全自己。"}, {"t": "light", "tag": "五、地方官與晚年", "h": "從刺史到香山居士", "pts": ["822 年任杭州刺史，後任蘇州刺史，任內有建設地方的記載", "退居洛陽，自號香山居士、醉吟先生，與劉禹錫並稱「劉白」", "842 年以刑部尚書致仕，846 年去世，享年七十五歲"], "src": "漢典；教學資料。治理細節各處說法不同，請核對。", "n": "後來他擔任杭州、蘇州刺史，有建設地方的記載。晚年退居洛陽，自號香山居士、醉吟先生，和劉禹錫並稱劉白。八百四十二年，他以刑部尚書的身分退休，八百四十六年去世，享年七十五歲。"}, {"t": "dark", "tag": "六、但是……", "h": "才華沒有爭議", "h2": "爭議在他怎麼對待身邊的女子", "img": "argue", "src": "圖：教師講義（NotebookLM 生成插圖）", "n": "才華沒有爭議。真正被討論的，是他怎麼對待身邊的女子。接下來，我們看三個爭議，並且檢查每一個指控的證據有多硬。"}, {"t": "light", "tag": "爭議一・無法守護的初戀", "h": "始亂終棄：湘靈？", "pts": ["少年戀人湘靈，因門第被母親反對", "808 年與弘農楊氏成婚", "〈潛別離〉等詩顯示確有深情；湘靈後來如何，史料極少"], "img": "dispute1", "src": "學者論文：白氏非顯族，婚姻有助仕途；CBDB。「終身未嫁」多為推測。", "n": "第一個爭議：初戀湘靈。門第壓力是真的，後來他娶了名門楊氏也是真的，他的詩也寫得深情。但湘靈後來是否一輩子沒嫁，史料很少，不能當成定論。"}, {"t": "light", "tag": "爭議二・一首詩帶來的傷害", "h": "逼死貞烈：關盼盼？", "pts": ["他在〈燕子樓三首〉序自述：盼盼念舊愛而不嫁，居燕子樓十餘年", "傳說他的詩句「一朝身去不相隨」，被盼盼視為責問她為何不隨夫而去", "把守節女子逼到「為何不死」的道德質問，現代讀來難以接受"], "img": "dispute2", "src": "〈燕子樓三首〉序；香港公共圖書館資料。", "n": "第二個爭議：關盼盼。傳說他寫詩，被盼盼讀成質問她為什麼不跟著丈夫一起去死。把守節的女子逼到為何不死的地步，這種道德質問，今天讀來很難接受。"}, {"t": "light", "tag": "爭議三・不尊重女性的生活", "h": "玩弄女性：樊素與小蠻？", "pts": ["晚年家中有善歌的樊素、善舞的小蠻（出處待核實）", "〈不能忘情吟〉約七十歲作，寫他考慮遣走樊素", "早年同情宮女，晚年自蓄聲伎，言行落差大", "「上百名」「十五六歲」「轉賣」查無可靠依據"], "img": "dispute3", "src": "劉緒貽〈白居易還應有一「愧」〉等；講義數字無可靠依據。", "n": "第三個爭議：樊素和小蠻。他晚年蓄養家妓有記載，也有不捨之情的詩。他早年同情宮女，晚年自己蓄養聲伎，言行確實有落差。但上百名、十五六歲、轉賣這些說法，我們找不到可靠依據。"}, {"t": "dark", "tag": "結語", "h": "你怎麼判？", "pts": ["才華高，能抵銷對他人的傷害嗎？", "如果你是白居易，面對母親與門第壓力，會怎麼做？", "哪一個指控的證據最硬？哪一個最像「網路加料」？"], "img": "reflect", "src": "本頁內容為歷史詮釋，史學界仍有不同看法。", "n": "最後三個問題。第一，才華高，能抵銷對他人的傷害嗎？第二，如果你是當時的白居易，你會怎麼做？第三，哪一個指控證據最硬，哪一個最像網路加料？請你自己判斷。"}];
+const stage=document.getElementById('stage');
+S.forEach((s,i)=>{const d=document.createElement('div');d.className='slide '+s.t;
+ let l='<div class="txt"><div class="tag">'+s.tag+'</div><h1>'+s.h+'</h1>'+(s.h2?'<h2>'+s.h2+'</h2>':'')+(s.line?'<div class="line">'+s.line+'</div>':'')+(s.pts?'<ul>'+s.pts.map(p=>'<li>'+p+'</li>').join('')+'</ul>':'')+'</div>';
+ if(s.img)l+='<div class="pic"><img src="life-img/'+s.img+'.jpg" alt="'+s.tag+'"></div>';
+ d.innerHTML=l+(s.src?'<div class="src"><strong>史料</strong>　'+s.src+'</div>':'')+'<div class="narration">'+s.n+'</div>';
+ stage.appendChild(d)});
+const sl=document.querySelectorAll('.slide'),N=sl.length,st=document.getElementById('st');
+let cur=0,auto=false,au=null,tm=null,ttok=0;
+let unlocked=false;function unlock(){if(unlocked||!window.speechSynthesis)return;try{var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);unlocked=true}catch(e){}}
+document.addEventListener('pointerdown',unlock,{passive:true});
+function stop(){ttok++;if(au){au.pause();au=null}if(window.speechSynthesis)speechSynthesis.cancel();if(tm){clearTimeout(tm);tm=null}}
+function done(){st.textContent='✓ 播放完畢';if(auto)tm=setTimeout(()=>{if(cur<N-1)go(cur+1);else{auto=false;document.getElementById('au').textContent='▶ 自動播放'}},900)}
+function tts(){if(!window.speechSynthesis){st.textContent='⚠️ 此瀏覽器不支援語音朗讀';return}
+ const parts=S[cur].n.match(/[^。！？；]+[。！？；]?/g)||[S[cur].n];let k=0;const my=++ttok;st.textContent='🔊 朗讀中';
+ const nx=()=>{if(my!==ttok)return;if(k>=parts.length){done();return}const u=new SpeechSynthesisUtterance(parts[k++]);twApply(u);u.rate=.95;u.onend=nx;speechSynthesis.speak(u)};setTimeout(()=>{if(my===ttok)nx()},80)}
+function play(){stop();unlock();tts()}
+function go(n){sl[cur].classList.remove('active');cur=(n+N)%N;sl[cur].classList.add('active');
+ document.getElementById('ct').textContent=(cur+1)+' / '+N;document.getElementById('bar').style.width=((cur+1)/N*100)+'%';
+ const lis=sl[cur].querySelectorAll('li');lis.forEach(e=>{e.style.animation='none';e.offsetHeight;e.style.animation=''});
+ if(auto)play();else{stop();st.textContent='⏸ 按「自動播放」或空白鍵聽旁白'}}
+document.getElementById('nx').onclick=()=>go(cur+1);
+document.getElementById('pv').onclick=()=>go(cur-1);
+document.getElementById('au').onclick=function(){auto=!auto;this.textContent=auto?'⏸ 暫停':'▶ 自動播放';if(auto)play();else stop()};
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();go(cur+1)}if(e.key==='ArrowLeft'){e.preventDefault();go(cur-1)}});
+sl[0].classList.add('active');go(0);
+</script></body></html>
